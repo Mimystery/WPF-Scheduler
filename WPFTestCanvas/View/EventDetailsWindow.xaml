@@ -1,0 +1,40 @@
+﻿<Window x:Class="WPFTestCanvas.View.EventDetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFTestCanvas.View"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="EventDetailsWindow" Height="500" Width="800" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Название:" FontWeight="Bold"/>
+        <TextBox Grid.Row="1" x:Name="TitleTextBox" Text="{Binding Title, Mode=TwoWay}" Margin="10,0,0,5"/>
+
+        <TextBlock Grid.Row="2" Text="Дата начала:" FontWeight="Bold"/>
+        <DatePicker Grid.Row="3" x:Name="StartDatePicker" SelectedDate="{Binding StartDate, Mode=TwoWay}" Margin="10,0,0,5"/>
+
+        <TextBlock Grid.Row="4" Text="Дата окончания:" FontWeight="Bold"/>
+        <DatePicker Grid.Row="5" x:Name="EndDatePicker" SelectedDate="{Binding EndDate, Mode=TwoWay}" Margin="10,0,0,5"/>
+
+        <TextBlock Grid.Row="6" Text="Цвет события:" FontWeight="Bold"/>
+        <xctk:ColorPicker x:Name="EventColorPicker" Grid.Row="7" SelectedColor="{Binding EventColor, Mode=TwoWay}" Margin="10,0,0,5"/>
+
+        <StackPanel Grid.Row="8" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Сохранить" Width="100" Margin="0,10,10,0" Click="ChangeSave_Click"/>
+            <Button Content="Закрыть" Width="100" Margin="0,10,0,0" Click="Close_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

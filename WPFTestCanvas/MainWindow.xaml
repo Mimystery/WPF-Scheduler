@@ -1,0 +1,324 @@
+﻿<Window x:Class="WPFTestCanvas.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:drag="http://schemas.gong-wpf-dragdrop"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+        xmlns:local="clr-namespace:WPFTestCanvas"
+        xmlns:dd="urn:gong-wpf-dragdrop"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:viewModel="clr-namespace:WPFTestCanvas.ViewModel"
+        xmlns:model="clr-namespace:WPFTestCanvas.Model"
+        mc:Ignorable="d"
+        Title="MainWindow" MinHeight="1000" MinWidth="1900" Background="White" WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <model:BoolToBackgroundConverter x:Key="BoolToBackgroundConverter"></model:BoolToBackgroundConverter>
+        <model:BoolToBorderConverter x:Key="BoolToBorderConverter"/>
+        <model:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"></model:BoolToVisibilityConverter>
+        <model:BoolToVisibilityMonthConverter x:Key="BoolToVisibilityMonthConverter"></model:BoolToVisibilityMonthConverter>
+    </Window.Resources>
+
+    <Window.DataContext>
+        <viewModel:SchedulerViewModel/>
+    </Window.DataContext>
+
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="1000"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="1" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Заголовок с текущим годом -->
+            <TextBlock Grid.Row="0" Text="{Binding CurrentMonthlyYear}" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
+            <Button Width="40" Height="40" Content="L" FontSize="20" HorizontalAlignment="Left" Margin="15,0,0,0" Command="{Binding PreviousYearCommand}"/>
+            <Button Width="40" Height="40" Content="R" FontSize="20" HorizontalAlignment="Left" Margin="70,0,0,0" Command="{Binding NextYearCommand}"/>
+
+            <!-- Сетка месяцев -->
+            <ItemsControl Grid.Row="1" ItemsSource="{Binding MonthsWithEvents}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="3"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="2" BorderBrush="Black" CornerRadius="1" Padding="10" Margin="5">
+                            <StackPanel Margin="-10">
+
+
+                                <Grid Margin="0,5,0,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Name}" 
+                                               FontSize="16" FontWeight="Bold" 
+                                               VerticalAlignment="Center" Margin="15 0 0 0"/>
+                                    <Button Grid.Column="1" 
+                                            Content="Show All" 
+                                            Margin="5,0,10,0"
+                                            Visibility="{Binding MultiWeekEvents.Count, Converter={StaticResource BoolToVisibilityMonthConverter}}"
+                                            Command="{Binding DataContext.ShowMonthEventsCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            CommandParameter="{Binding}"/>
+                                </Grid>
+
+                                <!-- Разделительная полоса -->
+                                <Border Height="2" Background="Black" Margin="0,0,0,5"/>
+
+                                <!-- Секция для полосок ивентов (верхний слой) -->
+                                <Grid MinHeight="200">
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- ItemsPanel для полосок. Здесь создаем Grid с 4 колонками и нужным количеством строк (например, 6 строк) -->
+                                    <ItemsControl Grid.ColumnSpan="4" ItemsSource="{Binding MultiWeekEvents}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*"/>
+                                                        <RowDefinition Height="*"/>
+                                                        <RowDefinition Height="*"/>
+                                                        <RowDefinition Height="*"/>
+                                                        <RowDefinition Height="*"/>
+                                                        <RowDefinition Height="*"/>
+                                                        <RowDefinition Height="*"/>
+                                                        <RowDefinition Height="*"/>
+                                                        <RowDefinition Height="*"/>
+                                                        <RowDefinition Height="*"/>
+                                                        <RowDefinition Height="*"/>
+                                                        <RowDefinition Height="*"/>
+                                                        <RowDefinition Height="*"/>
+                                                        <RowDefinition Height="*"/>
+                                                        <RowDefinition Height="*"/>
+                                                        <RowDefinition Height="*"/>
+                                                        <RowDefinition Height="*"/>
+                                                    </Grid.RowDefinitions>
+
+                                                </Grid>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemContainerStyle>
+                                            <Style TargetType="ContentPresenter">
+                                                <Setter Property="Grid.Column" Value="{Binding Column}"/>
+                                                <Setter Property="Grid.ColumnSpan" Value="{Binding ColumnSpan}"/>
+                                                <Setter Property="Grid.Row" Value="{Binding Row}"/>
+                                            </Style>
+                                        </ItemsControl.ItemContainerStyle>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Background="{Binding OriginalEvent.Color}" Height="30" VerticalAlignment="Center" Margin="2" MouseLeftButtonDown="MonthEvent_OnMouseLeftButtonDown">
+                                                    <TextBlock Text="{Binding OriginalEvent.Title}" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White"/>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+
+                                    <Border Grid.Column="1" Background="Black" Width="1" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0 -7 0 0"/>
+                                    <Border Grid.Column="2" Background="Black" Width="1" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0 -7 0 0"/>
+                                    <Border Grid.Column="3" Background="Black" Width="1" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0 -7 0 0"/>
+
+                                </Grid>
+                                
+
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="ПН" FontSize="18"></TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="0" Text="ВТ" FontSize="18"></TextBlock>
+                <TextBlock Grid.Column="2" Grid.Row="0" Text="СР" FontSize="18"></TextBlock>
+                <TextBlock Grid.Column="3" Grid.Row="0" Text="ЧТ" FontSize="18"></TextBlock>
+                <TextBlock Grid.Column="4" Grid.Row="0" Text="ПТ" FontSize="18"></TextBlock>
+                <TextBlock Grid.Column="5" Grid.Row="0" Text="СБ" FontSize="18"></TextBlock>
+                <TextBlock Grid.Column="6" Grid.Row="0" Text="ВС" FontSize="18"></TextBlock>
+
+            </Grid>
+
+            <Button Grid.Row="0" Width="35" Height="35" HorizontalAlignment="Left" Margin="10 0 0 0 " Content="L" Command="{Binding PreviousMonthCommand}"></Button>
+            <Button Grid.Row="0" Width="35" Height="35" HorizontalAlignment="Left" Margin="55 0 0 0 " Content="R" Command="{Binding NextMonthCommand}"></Button>
+            <TextBlock Grid.Row="0" Text="{Binding CurrentMonth}" Margin="110 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="27"></TextBlock>
+            <Button Grid.Row="0" Width="150" Height="40" HorizontalAlignment="Right" Margin="0 0 10 0" Content="Add Event" FontSize="20" Command="{Binding AddEventCommand}"></Button>
+
+            <ItemsControl Grid.Row="2" ItemsSource="{Binding Days}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="7"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.Style>
+                                <Style TargetType="Grid">
+                                    <Style.Triggers>
+                                        <!-- Если DataContext равен null (то есть пустой день) – скрываем всю ячейку -->
+                                        <DataTrigger Binding="{Binding}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Style>
+
+                            <Border BorderBrush="{Binding IsToday, Converter={StaticResource BoolToBorderConverter}}"
+                                    BorderThickness="1" Padding="1" MinHeight="60">
+                                <Border Background="{Binding IsToday, Converter={StaticResource BoolToBackgroundConverter}}">
+                                    <StackPanel>
+                                        <!-- Контейнер для числа и кнопки -->
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Button Grid.Column="0"
+                                                    Content="⋮"
+                                                    Visibility="{Binding Events, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                    Command="{Binding DataContext.ShowDayEventsCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                    CommandParameter="{Binding}"
+                                                    Width="40"
+                                                    Height="20"
+                                                    FontSize="12"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Left"
+                                                    Margin="2"/>
+
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{Binding Day}"
+                                                       FontSize="16"
+                                                       HorizontalAlignment="Right"
+                                                       Margin="0,0,5,0"/>
+                                        </Grid>
+
+                                        <!-- Изменённый ItemsControl для событий с сохранением строк -->
+                                        <ItemsControl ItemsSource="{Binding Events}" Height="180">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="30"/>
+                                                            <RowDefinition Height="30"/>
+                                                            <RowDefinition Height="30"/>
+                                                            <RowDefinition Height="30"/>
+                                                            <RowDefinition Height="30"/>
+                                                            <RowDefinition Height="30"/>
+                                                            <RowDefinition Height="30"/>
+                                                            <RowDefinition Height="30"/>
+                                                            <RowDefinition Height="30"/>
+                                                            <RowDefinition Height="30"/>
+                                                            <RowDefinition Height="30"/>
+                                                            <RowDefinition Height="30"/>
+                                                            <RowDefinition Height="30"/>
+                                                            <RowDefinition Height="30"/>
+                                                            <RowDefinition Height="30"/>
+                                                            <RowDefinition Height="30"/>
+                                                            <RowDefinition Height="30"/>
+                                                            <RowDefinition Height="30"/>
+                                                        </Grid.RowDefinitions>
+                                                    </Grid>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+
+                                            <ItemsControl.ItemContainerStyle>
+                                                <Style TargetType="ContentPresenter">
+                                                    <Setter Property="Grid.Row" Value="{Binding Row}"/>
+                                                </Style>
+                                            </ItemsControl.ItemContainerStyle>
+
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Background="{Binding EventColor}" CornerRadius="0" Padding="3" Margin="-1,5,-1,0" MouseLeftButtonDown="Event_MouseLeftButtonDown">
+                                                        <TextBlock FontSize="14" Foreground="White">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Text" Value=""/>
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding ShowTitle}" Value="True">
+                                                                            <Setter Property="Text" Value="{Binding OriginalEvent.Title}"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </Border>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+
+            </Grid>
+
+        </Grid>
+
+    </Grid>
+</Window>
